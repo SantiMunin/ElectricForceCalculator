@@ -41,9 +41,9 @@ public class Main {
 		double[] result = null;
 		double startTime = MPI.Wtime();
 		if (size == 1) {
-			result = new SequentialWorker().calculateForces(charges);
+			result = new SequentialWorker(charges).calculateForces();
 		} else {
-			result = new ParallelWorker(myrank, size).calculateForces(charges);
+			result = new ParallelWorker(myrank, size, charges).calculateForces();
 		}
 		double endTime = MPI.Wtime();
 		if (myrank == 0) {

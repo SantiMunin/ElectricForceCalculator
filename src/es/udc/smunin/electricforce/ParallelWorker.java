@@ -4,17 +4,18 @@ import mpi.MPI;
 import es.udc.smunin.electricforce.data.Charge;
 
 public class ParallelWorker {
-
+	private Charge[] charges;
 	private int myrank;
 	private int nproc;
 	private int totalSize = 0;
 	private int offset = 0;
 	private int amountOfWork = 0;
 
-	public ParallelWorker(int myrank, int nproc) {
+	public ParallelWorker(int myrank, int nproc, Charge[] charges) {
 		super();
 		this.myrank = myrank;
 		this.nproc = nproc;
+		this.charges = charges;
 	}
 
 	private int getOffset() {
@@ -41,12 +42,9 @@ public class ParallelWorker {
 	}
 
 	private double[] gatherResult(double[] result) {
-		// TODO
-		double[] total_result = myrank == 0 ? new double[totalSize]
-				: null;
-
-		MPI.COMM_WORLD.Gather(result, 0, amountOfWork, MPI.DOUBLE, total_result, 0, amountOfWork,
-				MPI.DOUBLE, 0);
+		double[] total_result = myrank == 0 ? new double[totalSize] : null;
+		MPI.COMM_WORLD.Gather(result, 0, amountOfWork, MPI.DOUBLE,
+				total_result, 0, amountOfWork, MPI.DOUBLE, 0);
 		return total_result;
 	}
 
@@ -61,7 +59,7 @@ public class ParallelWorker {
 		return result;
 	}
 
-	public double[] calculateForces(Charge[] charges) {
+	public double[] calculateForces() {
 		totalSize = charges.length;
 		this.offset = getOffset();
 		this.amountOfWork = getWorkSize();
