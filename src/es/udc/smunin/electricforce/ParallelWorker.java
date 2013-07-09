@@ -30,12 +30,16 @@ public class ParallelWorker {
 	private Charge[] broadcastCharges(Charge[] charges) {
 
 		if (myrank == 0) {
+			int[] nCharges = new int[] {charges.length};
+			MPI.COMM_WORLD.Bcast(nCharges, 0, 1, MPI.INT, 0);
 			MPI.COMM_WORLD.Bcast(charges, 0, charges.length, MPI.OBJECT, 0);
 			return charges;
 		} else {
-			Charge[] receivedCharges = new Charge[totalSize];
-			MPI.COMM_WORLD.Bcast(receivedCharges, 0, charges.length,
-					MPI.OBJECT, 0);
+			int[] nCharges = new int[] { 0 };
+			MPI.COMM_WORLD.Bcast(nCharges, 0, 1, MPI.INT, 0);
+			Charge[] receivedCharges = new Charge[nCharges[0]];
+			MPI.COMM_WORLD
+					.Bcast(receivedCharges, 0, nCharges[0], MPI.OBJECT, 0);
 			return receivedCharges;
 		}
 
@@ -51,7 +55,6 @@ public class ParallelWorker {
 	private double[] doWork(Charge[] charges) {
 
 		double[] result = new double[amountOfWork];
-
 		for (int i = offset; i < offset + amountOfWork; i++) {
 			result[i - offset] = charges[i].calculateForce(charges);
 		}
