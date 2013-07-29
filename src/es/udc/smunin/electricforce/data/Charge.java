@@ -2,11 +2,10 @@ package es.udc.smunin.electricforce.data;
 
 import java.io.Serializable;
 
-public class Charge implements Serializable{
+public class Charge implements Serializable {
 
 	private static final long serialVersionUID = 808016622567491760L;
 	private final static double K = 9e9D;
-	private final static int N = 100000;
 
 	private double x;
 	private double y;
@@ -50,30 +49,6 @@ public class Charge implements Serializable{
 		if (r == 0) {
 			return 0;
 		}
-		return (this.value * charge.value * K) / Math.pow(r,2);
+		return (this.value * charge.value * K) / Math.pow(r, 2);
 	}
-
-	public static void main(String[] args) {
-		Charge[] charges = new Charge[N];
-		double[] result = new double[N];
-		charges[0] = new Charge(1, 0, 1);
-		for (int i = 1; i < charges.length; i++) {
-			double x, y, c;
-			x = Math.random() * 10;
-			y = Math.random() * 10;
-			c = Math.random() * 10;
-			charges[i] = new Charge(x, y, c);
-		}
-		long time = System.currentTimeMillis();
-		for (int i = 0; i < charges.length; i++) {
-			result[i] = charges[i].calculateForce(charges);
-		}
-		long endtime = System.currentTimeMillis();
-		
-		for (int i = 0; i < result.length; i++) {
-			System.out.println(result[i]);
-		}
-		System.out.println("Took " + String.valueOf(endtime-time) + " ms.");
-	}
-
 }

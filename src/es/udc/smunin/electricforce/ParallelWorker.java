@@ -30,7 +30,7 @@ public class ParallelWorker {
 	private Charge[] broadcastCharges(Charge[] charges) {
 
 		if (myrank == 0) {
-			int[] nCharges = new int[] {charges.length};
+			int[] nCharges = new int[] { charges.length };
 			MPI.COMM_WORLD.Bcast(nCharges, 0, 1, MPI.INT, 0);
 			MPI.COMM_WORLD.Bcast(charges, 0, charges.length, MPI.OBJECT, 0);
 			return charges;
@@ -42,7 +42,6 @@ public class ParallelWorker {
 					.Bcast(receivedCharges, 0, nCharges[0], MPI.OBJECT, 0);
 			return receivedCharges;
 		}
-
 	}
 
 	private double[] gatherResult(double[] result) {
@@ -71,6 +70,5 @@ public class ParallelWorker {
 
 		double[] result = doWork(charges);
 		return gatherResult(result);
-
 	}
 }
