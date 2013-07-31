@@ -22,7 +22,7 @@ public class Main {
 	private static void printResults(double[] results, double startTime,
 			double endTime) {
 		System.out.println("Results");
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("0.000E0");
 		for (int i = 0; i < results.length; i++) {
 			System.out.print(df.format(results[i]) + " ");
 		}
